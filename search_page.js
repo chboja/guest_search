@@ -98,10 +98,7 @@ function kanaFullToHalf(str){
 }
 
 wanakanaScript.onload = () => {
-  if (location.pathname.includes("qr_create.html")) {
-    // --- Fetch guest full list for suggestions and search on page load ---
     fetchGuestFullList();
-  }
 
   const searchBtName = document.getElementById("searchBtName");
   if (searchBtName) {
