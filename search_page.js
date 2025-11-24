@@ -137,8 +137,11 @@ wanakanaScript.onload = () => {
       // --- Filter from cachedGuestList synchronously ---
       let foundResults = [];
       cachedGuestList.forEach(guest => {
-        if (!guest.searchName) return;
-        const guestSearchName = String(guest.searchName).toLowerCase();
+        // 우선 searchName을 사용하고, 없으면 name으로 검색
+        const targetBase = guest.searchName || guest.name || "";
+        const guestSearchName = String(targetBase).toLowerCase();
+        if (!guestSearchName) return;
+
         if (searchTerms.some(term => guestSearchName.includes(term))) {
           foundResults.push(guest);
         }
