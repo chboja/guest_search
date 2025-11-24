@@ -61,7 +61,7 @@ function removeSearchOverlay() {
   if (existingOverlay) existingOverlay.remove();
 }
 
-const getSheetApiUrl = () => 'https://script.google.com/macros/s/AKfycbxKetI7bsYz-WEXTIrajEmpaE9K8j53INevaPwQ4Rhl270D9jVyNxtqzBMtusA7SpJv/exec';
+const getSheetApiUrl = () => 'https://script.google.com/macros/s/AKfycbzhmZpY-jzohcqi8cz8fcf0dgeS4bMhWY5nx-XuqmW86eXeLFITvg3HxESo81hXObjH/exec';
 
 const wanakanaScript = document.createElement("script");
 wanakanaScript.src = "https://unpkg.com/wanakana";
