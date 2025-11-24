@@ -69,7 +69,7 @@ function handleVerifyReservation(e, callback) {
       const rowReservation = String(row[0]).trim().toLowerCase().split(/[-_]/)[0];
       return rowReservation === reservationToVerify;
     });
-    const breakfastFlag = match ? String(match[6]) : null;
+    const breakfastFlag = match ? String(match[7]) : null;
     return jsonpResponse(callback, {
       success: true,
       exists: !!match,
@@ -127,11 +127,12 @@ function handleSearchByRoom(e, callback) {
       name: row[2],
       checkIn: row[3],
       checkOut: row[4],
-      guestCount: row[5],
-      breakfastFlag: row[6],
-      searchName: row[7],
-      unpaid: row[8],
-      memo: row[9]
+      roomCount: row[5],
+      guestCount: row[6],
+      breakfastFlag: row[7],
+      searchName: (row[8] || "").toLowerCase(),
+      unpaid: row[9],
+      memo: row[10]
     }));
     return jsonpResponse(callback, { success: true, matches });
   } catch (err) {
@@ -159,14 +160,14 @@ function handleImportCsv(e, callback) {
     }
 
     const rows = csvData.trim().split(';').map(line => {
-      const [reservation, room, name, checkIn, checkOut, guestCount, breakfastFlag, searchName, unpaid, memo] = line.split(',');
-      return [reservation, room, name, checkIn, checkOut, guestCount, breakfastFlag, searchName, unpaid, memo];
+      const [reservation, room, name, checkIn, checkOut, roomCount, guestCount, breakfastFlag, searchName, unpaid, memo] = line.split(',');
+      return [reservation, room, name, checkIn, checkOut, roomCount, guestCount, breakfastFlag, searchName, unpaid, memo];
     });
 
-    // Set number format to plain text for columns 1, 3, 4, 5, 8, 10 before inserting values
+    // Set number format to plain text for columns 1, 3, 4, 5, 9, 11 before inserting values
     const lastRow = sheet.getLastRow() + 1;
     const numRows = rows.length;
-    const textColumns = [1, 3, 4, 5, 8, 10]; // 1-based column indices
+    const textColumns = [1, 3, 4, 5, 9, 11]; // 1-based column indices
     textColumns.forEach(function(col) {
       sheet.getRange(lastRow, col, numRows, 1).setNumberFormat('@');
     });
@@ -189,7 +190,7 @@ function handleGuestNameList(e, callback) {
     const data = sheet.getDataRange().getValues();
     const list = data.slice(1).map(row => ({
       name: row[2] || "",
-      searchName: (row[7] || "").toLowerCase()
+      searchName: (row[8] || "").toLowerCase()
     }));
     return jsonpResponse(callback, { success: true, list });
   } catch (err) {
@@ -211,11 +212,12 @@ function handleGuestFullList(e, callback) {
         name: row[2],
         checkIn: row[3],
         checkOut: row[4],
-        guestCount: row[5],
-        breakfastFlag: row[6],
-        searchName: (row[7] || "").toLowerCase(),
-        unpaid: row[8],
-        memo: row[9]
+        roomCount: row[5],
+        guestCount: row[6],
+        breakfastFlag: row[7],
+        searchName: (row[8] || "").toLowerCase(),
+        unpaid: row[9],
+        memo: row[10]
       };
     });
     return jsonpResponse(callback, { success: true, list: fullList });
@@ -264,8 +266,8 @@ function doPost(e) {
       guestSheet.getRange(guestLastRow, 1, guestRows.length, guestRows[0].length)
         .setValues(guestRows)
         .setWrap(true);
-      // --- Set number format to plain text for columns 1, 3, 4, 5, 8, 10 after setValues ---
-      const textColumns = [1, 3, 4, 5, 8, 10]; // 1-based indices
+      // --- Set number format to plain text for columns 1, 3, 4, 5, 9, 11 after setValues ---
+      const textColumns = [1, 3, 4, 5, 9, 11]; // 1-based indices
       textColumns.forEach(function(col) {
         guestSheet.getRange(guestLastRow, col, guestRows.length, 1).setNumberFormat('@');
       });

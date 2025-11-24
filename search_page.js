@@ -660,7 +660,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const rawUnpaid = row["未収金"]?.trim() || "";
                 const unpaid = rawUnpaid === "なし" ? "0" : rawUnpaid;
                 const memo = (row["メモ"] ?? "").trim().replace(/,/g, '、');
-                return [reservation, room, reserver, checkIn, checkOut, guestCount, breakfastFlag, searchName, unpaid, memo];
+                return [reservation, room, reserver, checkIn, checkOut, days, guestCount, breakfastFlag, searchName, unpaid, memo];
               }));
 
             console.log("📊 JSONP 전送用 문자열 배열 (with searchName):", compacted);
